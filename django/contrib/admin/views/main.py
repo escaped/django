@@ -67,7 +67,7 @@ class ChangeList(object):
         if to_field and not model_admin.to_field_allowed(request, to_field):
             raise DisallowedModelAdminToField("The field %s cannot be referenced." % to_field)
         self.to_field = to_field
-        self.params = dict(request.GET.items())
+        self.params = request.GET
         if PAGE_VAR in self.params:
             del self.params[PAGE_VAR]
         if ERROR_FLAG in self.params:
@@ -169,7 +169,7 @@ class ChangeList(object):
                     del p[k]
             else:
                 p[k] = v
-        return '?%s' % urlencode(sorted(p.items()))
+        return '?%s' % p.urlencode()
 
     def get_results(self, request):
         paginator = self.model_admin.get_paginator(request, self.queryset, self.list_per_page)
